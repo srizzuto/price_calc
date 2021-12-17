@@ -1,27 +1,82 @@
-require_relative './validation'
+require_relative './product'
 
-class Product < Validations
-  attr_reader :name, :price, :discount_quantity, :discount_price
-  def initialize(name, price, discount_quantity, discount_price)
-    @name = name
-    @price = price
-    @discount_quantity = discount_quantity
-    @discount_price = discount_price
+class ItemsList < Product
+
+
+  def self.show_price_table
+    puts "This week prices table:\n\n"
+    puts "Item    Unit Price      Sale Price"
+    puts "-----------------------------------"
+
+    @store.each { |product|
+      puts "#{product.name}\t$#{product.price}\t\t".concat(product.has_discount? ? "#{product.discount_quantity} for $#{product.discount_price}" : "")
+    }
+
+    puts "\nPlease enter all the items purchased separated by a comma:"
+    @purchased = gets.chomp.split(",")
   end
-
-  def has_discount?
-    self.discount_quantity > 0
+  
+  def self.get_input(purchased)
+    convert_input(purchased)
   end
-
-  def self.total_amount(product, quantity)
-    # Calculate total amount whether the product has discount or not
-    unless product.has_discount?
-      quantity * product.price
-    else
-      total_discount_price = (quantity/product.discount_quantity) * product.discount_price
-      total_regular_price = (quantity%product.discount_quantity) * product.price
-
-      total_discount_price + total_regular_price
+  
+  def self.input_purchased
+    validated = get_input(@purchased)
+    @uniq_items = validated.uniq
+    
+    # Waiting for a valid input
+    while is_a_valid_input?(@purchased, @uniq_items, @stored_items)
+      puts "Please enter a valid item(s) or type [quit] to exit"
+      @purchased = gets.chomp.split(",")
+      validated = get_input(@purchased)
+      @uniq_items = validated.uniq
     end
+
+    exit if quit?(@purchased)
+
+    total_amounts = calculate_amounts(validated, @store)
+
+    puts "Total price: #{total_amounts[0]}"
+    puts "You Saved: #{(@total_saved - total_amounts[0]).round(2)}"
   end
+
+  def self.calculate_amounts(validated, store)
+      @total_price = 0
+      @total_saved = 0
+
+      @uniq_items.each { |item|
+        item_quantity = validated.count(item)
+        prod = store.find { |product| product.name.downcase == item }
+        @total_price += total_amount(prod, item_quantity)
+        @total_saved += item_quantity * prod.price
+      }
+
+      [@total_price, @total_saved]
+  end
+
+  def self.convert_input(purchased)
+    # Remove any leading and trailing white spaces and convert to downcase
+    validated = []
+    purchased.each { |p| validated << p.strip.downcase }
+    validated
+  end
+
+  # Program begins...
+  # Create products
+  @milk = Product.new("Milk", 3.97, 2, 5.00)
+  @bread = Product.new("Bread", 2.17, 3, 6.00)
+  @banana = Product.new("Banana", 0.89, 0, 0)
+  @apple = Product.new("Apple", 0.99, 0, 0)
+
+  # Create store with products
+  @store = [@milk, @bread, @banana, @apple]
+  # Create array of products names
+  @stored_items = @store.map { |product| product.name.downcase }
+
+  # Print first message and table
+  show_price_table()
+  # Calculate total amount
+  input_purchased()
 end
+
+ItemsList.new()
