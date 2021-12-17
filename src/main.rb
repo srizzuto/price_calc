@@ -2,6 +2,7 @@ require_relative './product'
 
 class ItemsList < Product
 
+
   def self.show_price_table
     puts "This week prices table:\n\n"
     puts "Item    Unit Price      Sale Price"
@@ -14,11 +15,11 @@ class ItemsList < Product
     puts "\nPlease enter all the items purchased separated by a comma:"
     @purchased = gets.chomp.split(",")
   end
-
+  
   def self.get_input(purchased)
     convert_input(purchased)
   end
-
+  
   def self.input_purchased
     validated = get_input(@purchased)
     @uniq_items = validated.uniq
@@ -37,6 +38,20 @@ class ItemsList < Product
 
     puts "Total price: #{total_amounts[0]}"
     puts "You Saved: #{(@total_saved - total_amounts[0]).round(2)}"
+  end
+
+  def self.calculate_amounts(validated, store)
+      @total_price = 0
+      @total_saved = 0
+
+      @uniq_items.each { |item|
+        item_quantity = validated.count(item)
+        prod = store.find { |product| product.name.downcase == item }
+        @total_price += total_amount(prod, item_quantity)
+        @total_saved += item_quantity * prod.price
+      }
+
+      [@total_price, @total_saved]
   end
 
   def self.convert_input(purchased)
@@ -63,3 +78,5 @@ class ItemsList < Product
   # Calculate total amount
   input_purchased()
 end
+
+ItemsList.new

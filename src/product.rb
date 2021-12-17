@@ -2,7 +2,7 @@ require_relative './validation'
 
 class Product < Validations
   attr_reader :name, :price, :discount_quantity, :discount_price
-  def initialize(name, price, discount_quantity, discount_price)
+  def initialize(name = "", price = 0, discount_quantity = 0, discount_price = 0)
     @name = name
     @price = price
     @discount_quantity = discount_quantity
