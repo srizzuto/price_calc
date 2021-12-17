@@ -12,7 +12,31 @@ class ItemsList
     puts "\nPlease enter all the items purchased separated by a comma:"
     @purchased = gets.chomp.split(",")
   end
-  
+
+  def self.get_input(purchased)
+    convert_input(purchased)
+  end
+
+  def self.input_purchased
+    validated = get_input(@purchased)
+    @uniq_items = validated.uniq
+    
+    # Waiting for a valid input
+    while is_a_valid_input?(@purchased, @uniq_items, @stored_items)
+      puts "Please enter a valid item(s) or type [quit] to exit"
+      @purchased = gets.chomp.split(",")
+      validated = get_input(@purchased)
+      @uniq_items = validated.uniq
+    end
+
+    exit if quit?(@purchased)
+
+    total_amounts = calculate_amounts(validated, @store)
+
+    puts "Total price: #{total_amounts[0]}"
+    puts "You Saved: #{(@total_saved - total_amounts[0]).round(2)}"
+  end
+
   # Program begins...
   # Create products
   @milk = Product.new("Milk", 3.97, 2, 5.00)
