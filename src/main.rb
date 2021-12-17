@@ -37,6 +37,13 @@ class ItemsList
     puts "You Saved: #{(@total_saved - total_amounts[0]).round(2)}"
   end
 
+  def self.convert_input(purchased)
+    # Remove any leading and trailing white spaces and convert to downcase
+    validated = []
+    purchased.each { |p| validated << p.strip.downcase }
+    validated
+  end
+
   # Program begins...
   # Create products
   @milk = Product.new("Milk", 3.97, 2, 5.00)
