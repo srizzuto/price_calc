@@ -55,4 +55,9 @@ class ItemsList
   @store = [@milk, @bread, @banana, @apple]
   # Create array of products names
   @stored_items = @store.map { |product| product.name.downcase }
+
+  # Print first message and table
+  show_price_table()
+  # Calculate total amount
+  input_purchased()
 end
