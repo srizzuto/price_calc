@@ -1,4 +1,6 @@
-class ItemsList
+require_relative './product'
+
+class ItemsList < Product
 
   def self.show_price_table
     puts "This week prices table:\n\n"
