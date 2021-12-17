@@ -35,3 +35,24 @@ Banana    1            $0.99
 Total price : $19.02
 You saved $3.45 today.
 ```
+
+# Branches
+
+As you can see, I have created 2 additional branches besides the main one: ```development``` and ```test```. I worked on the last one since development should be the branch in which all will be commiting their features once the manager gives the OK, and the main (I haven't changed the name to ```production```) should never be touched.
+
+# Files
+
+I divided the files in 3, usually I do a file per class. In this case we have, main (```main.rb```), validations (```validate.rb```) and, product (```product.rb```)
+
+# Execution
+
+  1. Use ```git clone``` to copy the repository in your computer
+  2. Access the folder's directory and type, on CLI ```ruby src/main.rb```
+
+
+# Contact
+
+👤 **Sebastian Rizzuto**
+
+- GitHub: [@srizzuto](https://github.com/srizzuto)
+- LinkedIn: [Sebastian Rizzuto](https://www.linkedin.com/in/srizzuto/)
